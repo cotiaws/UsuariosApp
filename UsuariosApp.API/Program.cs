@@ -3,7 +3,8 @@ using UsuariosApp.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.AddSerilogConfig();
+if(builder.Environment.IsDevelopment())
+    builder.Host.AddSerilogConfig();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
