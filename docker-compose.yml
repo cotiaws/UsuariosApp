@@ -1,0 +1,60 @@
+services:
+
+  usuariosapp:
+    container_name: usuariosapp_api
+    build:
+       context: .
+       dockerfile: UsuariosApp.API/Dockerfile
+    ports:
+       - "8080:8080"
+    networks:
+      - usuariosapp-network
+    depends_on:
+       - sqlserver
+       - rabbitmq
+       - seq
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: usuariosapp_sqlserver
+    ports:
+      - "1435:1433"
+    environment:
+      SA_PASSWORD: "Coti@2025"
+      ACCEPT_EULA: "Y"
+    networks:
+      - usuariosapp-network
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: usuariosapp_rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - usuariosapp-network
+
+  seq:
+    image: datalust/seq:latest
+    container_name: usuariosapp_seq
+    ports:
+       - "5341:80"
+    environment:
+       - ACCEPT_EULA=Y
+    networks:
+       - usuariosapp-network
+    volumes:
+       - seq_data:/data
+
+networks:
+  usuariosapp-network:
+    driver: bridge
+
+volumes:
+  sqlserver_data:
+  seq_data:

@@ -1,0 +1,41 @@
+﻿using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+
+namespace UsuariosApp.API.Extensions
+{
+    public static class SwaggerDocExtension
+    {
+        public static IServiceCollection AddSwaggerDocConfig(this IServiceCollection services)
+        {
+            services.AddRouting(map => map.LowercaseUrls = true);
+
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen(options => 
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "API Usuarios - COTI Informática (v1)", Version = "v1" });
+                options.SwaggerDoc("v2", new OpenApiInfo { Title = "API Usuarios - COTI Informática (v2)", Version = "v2" });
+
+                options.DocInclusionPredicate((docName, apiDesc) =>
+                {
+                    if (!apiDesc.TryGetMethodInfo(out var methodInfo)) return false;
+                    var groupName = apiDesc.GroupName ?? "";
+                    return groupName == docName;
+                });
+            });
+
+            return services;
+        }
+
+        public static IApplicationBuilder UseSwaggerDocConfig(this IApplicationBuilder app)
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI(options => 
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Usuarios API v1");
+                options.SwaggerEndpoint("/swagger/v2/swagger.json", "Usuarios API v2");
+            });
+
+            return app;
+        }
+    }
+}
