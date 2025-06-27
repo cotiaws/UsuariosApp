@@ -1,0 +1,21 @@
+networks:
+  usuariosapp-network:
+    driver: bridge
+
+services:
+  sqlserver:
+    container_name: usuariosapp-sqlserver
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1434:1433"
+    environment:
+      SA_PASSWORD: "Coti@2025"
+      ACCEPT_EULA: "Y"
+    networks:
+      - usuariosapp-network
+    restart: always
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+
+volumes:
+  sqlserver-data:
