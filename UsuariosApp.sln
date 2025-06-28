@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens de Solução", "{95B92E84-C945-44D0-9D57-81A4CD9C4FC0}"
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
+		.github\workflows\master_usuariosapp-sergio.yml = .github\workflows\master_usuariosapp-sergio.yml
 	EndProjectSection
 EndProject
 Global
